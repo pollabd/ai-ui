@@ -11,46 +11,45 @@
   /* UI Colors */
   --color-background: #ffffff;
   --color-foreground: #0f172a;
+
   --color-muted: #64748b;
   --color-muted-foreground: #94a3b8;
-  --color-border: #f1f5f9;
+
+  /* ✅ FIXED: Softer border (less contrast) */
+  --color-border: #f8fafc; /* was #f1f5f9 */
 
   /* Dark Mode Overrides */
   --color-background-dark: #0f172a;
   --color-foreground-dark: #f8fafc;
   --color-muted-dark: #94a3b8;
-  --color-border-dark: #1e293b;
+
+  /* ✅ FIXED: Softer dark border */
+  --color-border-dark: #1a2433; /* was #1e293b */
 
   /* =========================
      ADDED (non-breaking upgrades)
   ========================== */
 
-  /* Secondary + Accent */
-  --color-secondary: #f1f5f9;
+  --color-secondary: #f8fafc;
   --color-secondary-foreground: #0f172a;
 
   --color-accent: #f97316;
   --color-accent-foreground: #ffffff;
 
-  /* States */
   --color-destructive: #ef4444;
   --color-destructive-foreground: #ffffff;
 
-  /* Inputs / Ring */
-  --color-input: #e2e8f0;
+  --color-input: #f1f5f9;
   --color-ring: #f97316;
 
-  /* Surfaces */
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
 
   --color-popover: #ffffff;
   --color-popover-foreground: #0f172a;
 
-  /* Radius (design consistency) */
   --radius: 0.75rem;
 
-  /* Charts (future-proof) */
   --color-chart-1: #f97316;
   --color-chart-2: #22c55e;
   --color-chart-3: #3b82f6;
@@ -75,13 +74,16 @@
       sans-serif;
   }
 
-  /* Improved selection (fallback + better contrast) */
+  /* ✅ GLOBAL BORDER SOFTENER */
+  * {
+    border-color: var(--color-border);
+  }
+
   ::selection {
     background: #f97316;
     color: #ffffff;
   }
 
-  /* Smooth scrollbar (optional but premium) */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -97,7 +99,6 @@
     --color-muted: var(--color-muted-dark);
     --color-border: var(--color-border-dark);
 
-    /* Enhanced dark mode */
     --color-primary: #fb923c;
 
     --color-secondary: #1e293b;
@@ -116,7 +117,7 @@
 }
 
 /* =========================
-   Utilities - Responsive Layout Padding
+   Utilities
 ========================= */
 @layer utilities {
   .layout-padding {
@@ -140,10 +141,9 @@
 }
 
 /* =========================
-   Component Styles
+   Components
 ========================= */
 @layer components {
-  /* Refined Button - Matches the Orange theme */
   .btn-primary {
     @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full 
            font-semibold transition-all duration-200 shadow-sm 
@@ -153,19 +153,19 @@
     color: var(--color-primary-foreground);
   }
 
-  /* Professional Card - Soft deep shadows with orange hint on hover */
   .card {
     @apply rounded-[24px] border p-6 transition-all duration-300;
+
     background-color: var(--color-card);
     color: var(--color-card-foreground);
     border-color: var(--color-border);
 
     box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 0.03),
-      0 2px 4px -2px rgb(0 0 0 / 0.03);
+      0 4px 6px -1px rgb(0 0 0 / 0.02),
+      0 2px 4px -2px rgb(0 0 0 / 0.02);
   }
 
   .card:hover {
-    @apply shadow-xl shadow-orange-100/30 -translate-y-1;
+    @apply shadow-xl shadow-orange-100/20 -translate-y-1;
   }
 }

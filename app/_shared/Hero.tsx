@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { randomUUID } from "crypto";
 
 function Hero() {
   const [platform, setPlatform] = useState<"website" | "mobile">("website");
@@ -18,6 +17,15 @@ function Hero() {
   const { user } = useUser();
   const router = useRouter();
 
+  const suggestions = [
+    "A modern SaaS landing page",
+    "Fintech dashboard with dark mode",
+    "Fitness app progress tracking",
+    "E-commerce product page",
+    "Minimal portfolio website",
+    "Social media app feed",
+  ];
+
   const handleGenerate = async () => {
     if (!userInput.trim()) return;
     setLoading(true);
@@ -26,17 +34,18 @@ function Hero() {
       router.push("/sign-in");
       return;
     }
+
     const projectId = crypto.randomUUID();
 
     const result = await axios.post("/api/project", {
       userInput,
       device: platform,
-      projectId: projectId,
+      projectId,
     });
 
-    console.log(result.data);
-
+    // console.log(result.data);
     setLoading(false);
+    router.push("/project/" + projectId);
   };
 
   useEffect(() => {
@@ -52,7 +61,7 @@ function Hero() {
 
   return (
     <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center px-4 overflow-hidden">
-      {/* Dynamic Glow */}
+      {/* Glow Background */}
       <div
         className={cn(
           "absolute inset-0 -z-10 blur-3xl transition-all duration-700",
@@ -69,7 +78,7 @@ function Hero() {
           <span>AI Engine v3.0 is Live</span>
         </div>
 
-        {/* Headline */}
+        {/* Title */}
         <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[1.05] text-foreground">
           Design{" "}
           <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
@@ -84,7 +93,7 @@ function Hero() {
           Describe your vision. Our AI handles the layout, spacing, and components instantly.
         </p>
 
-        {/* Input Container */}
+        {/* Input Box */}
         <div
           className={cn(
             "relative group rounded-3xl border bg-card/60 backdrop-blur-xl shadow-2xl transition-all duration-300",
@@ -94,7 +103,6 @@ function Hero() {
           )}
         >
           <div className="flex flex-col">
-            {/* Textarea */}
             <InputGroupTextarea
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
@@ -104,14 +112,8 @@ function Hero() {
               className="w-full min-h-35 p-6 text-lg leading-relaxed resize-none bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50"
             />
 
-            {/* Helper Text */}
-            <p className="text-xs text-muted-foreground px-6 pb-2 text-left">
-              Try: “A fintech dashboard with charts and dark mode”
-            </p>
-
             {/* Toolbar */}
             <div className="flex flex-wrap items-center justify-between p-4 border-t border-border/50 gap-4">
-              {/* Platform Toggle */}
               <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-xl border border-border">
                 {(["website", "mobile"] as const).map((type) => (
                   <button
@@ -134,7 +136,6 @@ function Hero() {
                 ))}
               </div>
 
-              {/* Actions */}
               <div className="flex items-center gap-3">
                 <span className="hidden md:flex items-center gap-1 text-xs text-muted-foreground mr-2">
                   <Command className="w-3 h-3" /> + Enter
@@ -144,23 +145,39 @@ function Hero() {
                   size="lg"
                   onClick={handleGenerate}
                   disabled={!userInput.trim() || loading}
-                  className="rounded-xl px-8 font-bold gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl px-8 font-bold gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                 >
                   {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Generating...
-                    </>
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      Generate
-                    </>
+                    <Send className="w-4 h-4" />
                   )}
+                  {loading ? "Generating..." : "Generate"}
                 </Button>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Updated Suggestions UI */}
+        <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+          <span className="text-xs font-medium text-muted-foreground mr-2 uppercase tracking-wider">
+            Try these:
+          </span>
+          {suggestions.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => setUserInput(item)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-sm transition-all duration-200 border",
+                "bg-secondary/30 border-transparent text-muted-foreground",
+                "hover:border-primary/30 hover:bg-primary/5 hover:text-primary hover:shadow-sm",
+                "active:scale-95 whitespace-nowrap",
+              )}
+            >
+              {item}
+            </button>
+          ))}
         </div>
       </div>
     </section>

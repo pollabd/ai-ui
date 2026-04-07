@@ -14,8 +14,8 @@ function Header() {
     <header className={cn("sticky top-0 z-50 w-full transition-all duration-300")}>
       <div className="layout-padding flex h-20 items-center justify-between">
         {/* Logo */}
-        <div className="flex w-[150px] items-center">
-          <span className="text-2xl font-bold tracking-tight cursor-pointer transition-opacity hover:opacity-80 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+        <div className="flex w-37.5 items-center">
+          <span className="text-2xl font-bold tracking-tight cursor-pointer transition-opacity hover:opacity-80 bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             MOK
           </span>
         </div>
@@ -26,17 +26,17 @@ function Header() {
             {["Home", "Pricing"].map((item) => (
               <li
                 key={item}
-                className="relative cursor-pointer transition-all duration-200 hover:text-foreground hover:-translate-y-[1px]"
+                className="relative cursor-pointer transition-all duration-200 hover:text-foreground hover:-translate-y-px"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
               </li>
             ))}
           </ul>
         </nav>
 
         {/* Actions */}
-        <div className="flex w-[200px] items-center justify-end gap-3">
+        <div className="flex w-50 items-center justify-end gap-3">
           {!user ? (
             <SignInButton mode="modal">
               <Button className="rounded-full px-6 font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
