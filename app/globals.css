@@ -1,1 +1,171 @@
 @import "tailwindcss";
+
+/* =========================
+   Theme Variables
+========================= */
+@theme {
+  /* Branding - Vibrant Modern Orange */
+  --color-primary: #f97316;
+  --color-primary-foreground: #ffffff;
+
+  /* UI Colors */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-muted: #64748b;
+  --color-muted-foreground: #94a3b8;
+  --color-border: #f1f5f9;
+
+  /* Dark Mode Overrides */
+  --color-background-dark: #0f172a;
+  --color-foreground-dark: #f8fafc;
+  --color-muted-dark: #94a3b8;
+  --color-border-dark: #1e293b;
+
+  /* =========================
+     ADDED (non-breaking upgrades)
+  ========================== */
+
+  /* Secondary + Accent */
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+
+  --color-accent: #f97316;
+  --color-accent-foreground: #ffffff;
+
+  /* States */
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  /* Inputs / Ring */
+  --color-input: #e2e8f0;
+  --color-ring: #f97316;
+
+  /* Surfaces */
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0f172a;
+
+  /* Radius (design consistency) */
+  --radius: 0.75rem;
+
+  /* Charts (future-proof) */
+  --color-chart-1: #f97316;
+  --color-chart-2: #22c55e;
+  --color-chart-3: #3b82f6;
+  --color-chart-4: #eab308;
+  --color-chart-5: #a855f7;
+}
+
+/* =========================
+   Base Styles
+========================= */
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+
+    @apply antialiased selection:bg-orange-100 selection:text-orange-900;
+
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* Improved selection (fallback + better contrast) */
+  ::selection {
+    background: #f97316;
+    color: #ffffff;
+  }
+
+  /* Smooth scrollbar (optional but premium) */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
+  }
+
+  .dark {
+    --color-background: var(--color-background-dark);
+    --color-foreground: var(--color-foreground-dark);
+    --color-muted: var(--color-muted-dark);
+    --color-border: var(--color-border-dark);
+
+    /* Enhanced dark mode */
+    --color-primary: #fb923c;
+
+    --color-secondary: #1e293b;
+    --color-secondary-foreground: #f8fafc;
+
+    --color-accent: #fb923c;
+
+    --color-input: #1e293b;
+
+    --color-card: #0f172a;
+    --color-card-foreground: #f8fafc;
+
+    --color-popover: #0f172a;
+    --color-popover-foreground: #f8fafc;
+  }
+}
+
+/* =========================
+   Utilities - Responsive Layout Padding
+========================= */
+@layer utilities {
+  .layout-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .layout-padding {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .layout-padding {
+      padding-left: 6rem;
+      padding-right: 6rem;
+    }
+  }
+}
+
+/* =========================
+   Component Styles
+========================= */
+@layer components {
+  /* Refined Button - Matches the Orange theme */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full 
+           font-semibold transition-all duration-200 shadow-sm 
+           hover:shadow-orange-200/50 hover:shadow-lg active:scale-95;
+
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  /* Professional Card - Soft deep shadows with orange hint on hover */
+  .card {
+    @apply rounded-[24px] border p-6 transition-all duration-300;
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    border-color: var(--color-border);
+
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.03),
+      0 2px 4px -2px rgb(0 0 0 / 0.03);
+  }
+
+  .card:hover {
+    @apply shadow-xl shadow-orange-100/30 -translate-y-1;
+  }
+}

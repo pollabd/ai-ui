@@ -4,7 +4,7 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Provider({ childern }: any) {
+function Provider({ children }: any) {
   const [userDetail, setUserDetail] = useState();
   useEffect(() => {
     createNewUser();
@@ -16,7 +16,7 @@ function Provider({ childern }: any) {
   };
   return (
     <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
-      <div>{childern}</div>;
+      <div>{children}</div>
     </UserDetailContext.Provider>
   );
 }
