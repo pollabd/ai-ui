@@ -44,7 +44,7 @@ function SettingsSection({ projectDetail }: Props) {
               <Input
                 placeholder="Untitled Design"
                 className="bg-background/50 border-border/60 focus-visible:ring-primary/20"
-                value={projectName}
+                value={projectName ?? ""}
                 onChange={(e) => setProjectName(e.target.value)}
               />
             </div>
