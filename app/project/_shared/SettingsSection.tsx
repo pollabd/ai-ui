@@ -5,14 +5,24 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { THEME_NAME_LIST, THEMES } from "@/data/themes";
 import { Camera, Share, Sparkles, Check, LayoutGrid } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { ProjectType } from "@/type/types";
 
-function SettingsSection() {
+type Props = {
+  projectDetail: ProjectType | undefined;
+};
+
+function SettingsSection({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("AURORA_INK");
-  const [projectName, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState(projectDetail?.projectName);
+  const [deviceType, setDeviceType] = useState<string | undefined>(projectDetail?.device);
   const [userNewScreenInput, setUserNewScreenInput] = useState<string>("");
+
+  useEffect(() => {
+    projectDetail && setProjectName(projectDetail.projectName);
+  }, [projectDetail]);
 
   return (
     <aside className="w-80 h-screen flex flex-col border-r bg-card/50 backdrop-blur-sm overflow-hidden">
@@ -34,6 +44,7 @@ function SettingsSection() {
               <Input
                 placeholder="Untitled Design"
                 className="bg-background/50 border-border/60 focus-visible:ring-primary/20"
+                value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
               />
             </div>
