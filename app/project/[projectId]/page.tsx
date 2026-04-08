@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { ProjectType, ScreenConfig } from "@/type/types";
+import Canvas from "../_shared/Canvas";
 
 function ProjectCanvasPlayground() {
   const { projectId } = useParams();
@@ -78,15 +79,19 @@ function ProjectCanvasPlayground() {
     <div>
       <ProjectHeader />
       {/* Settings */}
-      {loading && (
-        <div className="absolute p-3 bg-blue-300/20 border-blue-400 rounded-xl left-1/2 top-20">
-          <h2 className="flex gap-2 items-center">
-            <Loader2Icon className="animate-spin" /> {loadingMsg}
-          </h2>
-        </div>
-      )}
-      <SettingsSection projectDetail={projectDetail} />
-      {/* Canvas */}
+      <div className="flex">
+        {loading && (
+          <div className="absolute p-3 bg-blue-300/20 border-blue-400 rounded-xl left-1/2 top-20">
+            <h2 className="flex gap-2 items-center">
+              <Loader2Icon className="animate-spin" /> {loadingMsg}
+            </h2>
+          </div>
+        )}
+        <SettingsSection projectDetail={projectDetail} />
+        {/* Canvas */}
+
+        <Canvas projectDetail={projectDetail} screenConfig={screenConfig} loading={loading} />
+      </div>
     </div>
   );
 }
