@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { THEME_NAME_LIST, THEMES } from "@/data/themes";
 import { Camera, Share, Sparkles, Check, LayoutGrid } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ProjectType } from "@/type/types";
+import { SettingContext } from "@/context/SettingsContext";
 
 type Props = {
   projectDetail: ProjectType | undefined;
@@ -17,12 +18,21 @@ type Props = {
 function SettingsSection({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("AURORA_INK");
   const [projectName, setProjectName] = useState(projectDetail?.projectName);
-  const [deviceType, setDeviceType] = useState<string | undefined>(projectDetail?.device);
   const [userNewScreenInput, setUserNewScreenInput] = useState<string>("");
+  const { settingsDetail, setSettingsDetail } = useContext(SettingContext);
 
   useEffect(() => {
     projectDetail && setProjectName(projectDetail.projectName);
+    setSelectedTheme(projectDetail?.theme as string);
   }, [projectDetail]);
+
+  const onSelectTheme = (theme: string) => {
+    setSelectedTheme(theme);
+    setSettingsDetail((prev: any) => ({
+      ...prev,
+      theme: theme,
+    }));
+  };
 
   return (
     <aside className="w-80 h-screen flex flex-col border-r bg-card/50 backdrop-blur-sm overflow-hidden">
@@ -81,7 +91,7 @@ function SettingsSection({ projectDetail }: Props) {
                 return (
                   <div
                     key={theme}
-                    onClick={() => setSelectedTheme(theme)}
+                    onClick={() => onSelectTheme(theme)}
                     className={cn(
                       "group relative p-3 border rounded-xl transition-all cursor-pointer",
                       "hover:bg-accent/50 hover:border-primary/30",

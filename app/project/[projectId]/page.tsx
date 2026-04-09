@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ProjectHeader from "../_shared/ProjectHeader";
 import SettingsSection from "../_shared/SettingsSection";
 import axios from "axios";
@@ -8,17 +8,18 @@ import { useParams } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { ProjectType, ScreenConfig } from "@/type/types";
 import Canvas from "../_shared/Canvas";
+import { SettingContext } from "@/context/SettingsContext";
 
 function ProjectCanvasPlayground() {
   const { projectId } = useParams();
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
   const [screenConfig, setScreenConfig] = useState<ScreenConfig[]>([]);
   const [screenConfigOriginal, setScreenConfigOriginal] = useState<ScreenConfig[]>([]);
+  const { settingsDetail, setSettingsDetail } = useContext(SettingContext);
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadinMsg] = useState("Loading");
 
-  const [isGenerating, setIsGenerating] = useState(false); // ✅ guard
-
+  const [isGenerating, setIsGenerating] = useState(false); 
   useEffect(() => {
     if (projectId) GetProjectDetail();
   }, [projectId]);
@@ -31,7 +32,7 @@ function ProjectCanvasPlayground() {
     setProjectDetail(result?.data?.projectDetail);
     setScreenConfigOriginal(result?.data?.screenConfig);
     setScreenConfig(result?.data?.screenConfig);
-
+    setSettingsDetail(result?.data?.projectDetail);
     setLoading(false);
   };
 
