@@ -45,10 +45,8 @@ export async function POST(req: NextRequest) {
         ),
       );
 
-    // console.log(updateResult);
-
     return NextResponse.json(updateResult);
   } catch (error) {
-    NextResponse.json({ message: "Internal server error" });
+    return NextResponse.json({ message: "Internal server error" });
   }
 }

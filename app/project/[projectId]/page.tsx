@@ -13,54 +13,64 @@ function ProjectCanvasPlayground() {
   const { projectId } = useParams();
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
   const [screenConfig, setScreenConfig] = useState<ScreenConfig[]>([]);
+  const [screenConfigOriginal, setScreenConfigOriginal] = useState<ScreenConfig[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadinMsg] = useState("Loading");
 
+  const [isGenerating, setIsGenerating] = useState(false); // ✅ guard
+
   useEffect(() => {
-    projectId && GetProjectDetail();
+    if (projectId) GetProjectDetail();
   }, [projectId]);
 
   const GetProjectDetail = async () => {
     setLoading(true);
     setLoadinMsg("Loading...");
     const result = await axios.get("/api/project?projectId=" + projectId);
+
     setProjectDetail(result?.data?.projectDetail);
+    setScreenConfigOriginal(result?.data?.screenConfig);
     setScreenConfig(result?.data?.screenConfig);
-    // if (result.data.screenConfig.length == 0) {
-    //   generateScreenConfig();
-    // }
+
     setLoading(false);
   };
 
   useEffect(() => {
-    if (projectDetail && screenConfig && screenConfig.length == 0) {
+    if (!projectDetail) return;
+
+    if (screenConfigOriginal?.length === 0) {
       generateScreenConfig();
-    } else if (projectDetail && screenConfig) {
+    } else if (screenConfigOriginal?.length > 0) {
       GenerateScreenUIUX();
     }
-  }, [projectDetail && screenConfig]);
+  }, [projectDetail, screenConfigOriginal]);
+
   const generateScreenConfig = async () => {
-    // console.log("Generating screen config");
     setLoading(true);
     setLoadinMsg("Generating screen config...");
-    const result = await axios.post("/api/generate-config", {
+
+    await axios.post("/api/generate-config", {
       projectId: projectId,
       deviceType: projectDetail?.device,
       userInput: projectDetail?.userInput,
     });
-    console.log(result.data);
 
-    GetProjectDetail();
+    await GetProjectDetail();
     setLoading(false);
   };
 
   const GenerateScreenUIUX = async () => {
+    if (isGenerating) return; // ✅ prevents duplicate runs
+
+    setIsGenerating(true);
     setLoading(true);
 
     for (let index = 0; index < screenConfig?.length; index++) {
       const screen = screenConfig[index];
       if (screen?.code) continue;
-      setLoadinMsg("Generating Screen" + index + 1);
+
+      setLoadinMsg("Generating Screen " + (index + 1));
+
       const result = await axios.post("/api/generate-screen-ui", {
         projectId,
         screenId: screen.screenId,
@@ -68,17 +78,18 @@ function ProjectCanvasPlayground() {
         purpose: screen.purpose,
         screenDescription: screen.screenDescription,
       });
-      console.log(result.data);
+
       setScreenConfig((prev) => prev.map((item, i) => (i === index ? result.data : item)));
     }
 
     setLoading(false);
+    setIsGenerating(false);
   };
 
   return (
     <div>
       <ProjectHeader />
-      {/* Settings */}
+
       <div className="flex">
         {loading && (
           <div className="absolute p-3 bg-blue-300/20 border-blue-400 rounded-xl left-1/2 top-20">
@@ -87,8 +98,8 @@ function ProjectCanvasPlayground() {
             </h2>
           </div>
         )}
+
         <SettingsSection projectDetail={projectDetail} />
-        {/* Canvas */}
 
         <Canvas projectDetail={projectDetail} screenConfig={screenConfig} loading={loading} />
       </div>
